@@ -41,7 +41,7 @@ export class LoginComponent {
   errorText = signal<string | null>(null);
 
   readonly form = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
+    username: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required]],
     rememberMe: [false]
   })
@@ -63,9 +63,9 @@ export class LoginComponent {
     if (this.isSubmitting()) return;
     this.isSubmitting.set(true);
 
-    const {email, password} = this.form.getRawValue();
+    const {username, password} = this.form.getRawValue();
 
-    this.loginService.login(email ?? '', password ?? '').subscribe({
+    this.loginService.login(username?? '', password ?? '').subscribe({
       next: (response) => {
         console.log("Login response: ", response);
         if (this.loginService.isLoggedIn()) {

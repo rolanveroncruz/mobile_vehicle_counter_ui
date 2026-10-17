@@ -1,0 +1,61 @@
+<div class="main-shell">
+  <!-- Top app bar -->
+  <mat-toolbar class="app-bar" color="white">
+    <div class="left">
+      <img src="mvc_logo.png" alt="CLM Logo" class="brand-logo" />
+
+      <span class="divider" aria-hidden="true"></span>
+
+      <span class="page-title">{{ pageTitle() }}</span>
+    </div>
+
+    <span class="spacer"></span>
+    <button
+      mat-icon-button
+      type="button"
+      class="avatar-button"
+      [matMenuTriggerFor]="userMenu"
+      aria-label="Open user menu"
+    >
+      <mat-icon aria-hidden="true">account_circle</mat-icon>
+    </button>
+
+    <mat-menu #userMenu="matMenu">
+      <button mat-menu-item type="button" (click)="onGenerateToken()">
+        <mat-icon aria-hidden="true">vpn_key</mat-icon>
+        <span>Generate token</span>
+      </button>
+
+      <mat-divider></mat-divider>
+
+      <button mat-menu-item type="button" (click)="onLogout()">
+        <mat-icon aria-hidden="true">logout</mat-icon>
+        <span>Logout</span>
+      </button>
+    </mat-menu>
+
+  </mat-toolbar>
+
+  <!-- Secondary nav row -->
+  <mat-toolbar class="nav-bar" color="primary">
+    <nav class="nav" aria-label="Primary navigation">
+      @for (item of navItems; track item.route) {
+        <a
+          mat-button
+          class="nav-link"
+          [routerLink]="item.route"
+          routerLinkActive="is-active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <mat-icon aria-hidden="true">{{ item.icon }}</mat-icon>
+          <span>{{ item.label }}</span>
+        </a>
+      }
+    </nav>
+  </mat-toolbar>
+
+  <!-- Page content -->
+  <main class="content">
+    <router-outlet></router-outlet>
+  </main>
+</div>

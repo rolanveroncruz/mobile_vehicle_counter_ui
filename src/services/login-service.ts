@@ -30,18 +30,13 @@ export interface LoginClient {
 
 export interface LoginResponse {
   access_token: string;
-  token_type: string;
   expires_in: number;
   user: LoginUser;
-  client: LoginClient;
 }
 
 export interface LoggedInUser {
   user_id: number;
-  name: string;
   email: string;
-  client_id: number;
-  client_name: string;
 }
 
 const AUTH_KEY = 'clm_login_v1';
@@ -56,18 +51,13 @@ export class LoginService {
   // ---- state (signals) -------
   readonly currentUser = signal<LoggedInUser>({
     user_id: 0,
-    name: "",
     email: "",
-    client_id: 0,
-    client_name: "",
   });
   readonly token = signal<string | null>(null);
 
 
   // ---- derived state -------
   readonly isLoggedIn = computed(() => !!this.token());
-  readonly clientId = computed(()=> this.currentUser().client_id);
-  readonly clientName = computed(()=>this.currentUser().client_name);
 
   constructor(@Inject(PLATFORM_ID) platformId: object, private httpClient: HttpClient) {
     this.isBrowser = isPlatformBrowser(platformId);
@@ -90,7 +80,7 @@ export class LoginService {
 
     const body: LoginRequest = {email, password};
     console.log("In Service, Login Request. Attempting login");
-    return this.httpClient.post<LoginResponse>(`${this.apiUrl}/auth/login`, body).pipe(
+    return this.httpClient.post<LoginResponse>(`${this.apiUrl}/login`, body).pipe(
       tap(response => {
         let isValid = this.isValid(response);
         if (isValid) {
@@ -99,10 +89,7 @@ export class LoginService {
           console.log("In Service, Login Success. Storing token and user info");
           const user: LoggedInUser = {
             user_id: response.user.id,
-            name: response.user.first_name + ' ' + response.user.last_name,
             email: response.user.email,
-            client_id: response.client.id,
-            client_name: response.client.name
           }
           console.log(" Calling loginSuccess with token and user info: ", response, response.access_token, "  ", user, " ")
           this.loginSuccess(response.access_token, user);
@@ -129,16 +116,20 @@ export class LoginService {
   // Check if the response is valid. If so, write it to the local storage.
   isValid(x: any): boolean {
     const x_check = x && typeof x === 'object';
+    console.log("In IsValid x_check is:", x_check);
+
     const valid_token = typeof x.access_token === 'string' && x.access_token.length > 0
       && looksLikeJwt(x.access_token);
-    const valid_token_type =  x.token_type && typeof x.token_type==="string" && x.token_type === 'Bearer';
+    console.log("In IsValid valid_token is:", valid_token);
+
     const valid_expires_in = x.expires_in && typeof x.expires_in === 'number' && x.expires_in > 0;
+    console.log("In IsValid valid_expires_in is:", valid_expires_in);
+
     const valid_user = typeof x.user.id === 'number' && x.user.id > 0 &&
-      x.user.first_name.trim().length > 0 &&
       typeof x.user.email === 'string' && x.user.email.trim().length > 0 && x.user.email.includes('@');
-    const valid_client = typeof x.client.id === 'number' && x.client.id > 0 &&
-      typeof x.client.name === 'string' && x.client.name.trim().length > 0;
-    return x_check && valid_token_type && valid_expires_in && valid_user && valid_client;
+    console.log("In IsValid valid_user is:", valid_user);
+
+    return x_check && valid_token && valid_expires_in && valid_user ;
   }
 
   logout() {
@@ -178,7 +169,7 @@ export class LoginService {
       if (parsed.currentUser && typeof parsed.currentUser === 'object') {
         this.currentUser.set(parsed.currentUser);
       } else {
-        this.currentUser.set({email: "", name: "", client_id: 0, client_name: "", user_id: 0});
+        this.currentUser.set({email: "",  user_id: 0});
       }
     } catch {
       localStorage.removeItem(AUTH_KEY);
@@ -187,7 +178,7 @@ export class LoginService {
 
   // CHANGE: central helper to wipe session (memory + storage)
   private clearSessionState() {
-    this.currentUser.set({email: "", name: "", client_id:0, client_name: "", user_id: 0});
+    this.currentUser.set({email: "",  user_id: 0});
     this.token.set(null);
     this.clearStorage();
   }
