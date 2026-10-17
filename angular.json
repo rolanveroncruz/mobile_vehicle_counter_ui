@@ -56,6 +56,9 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
+          "options": {
+            "port": 5731
+          },
           "configurations": {
             "production": {
               "buildTarget": "mobile_vehicle_counter_ui:build:production"
@@ -87,5 +90,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "705c2dad-df4e-48cc-9910-d24d10ac3458"
   }
 }

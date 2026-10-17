@@ -1,0 +1,75 @@
+<div class="login-page">
+  <mat-card class="login-card" appearance="outlined">
+    <mat-card-header class="login-header">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">
+          <mat-icon>verified_user</mat-icon>
+        </div>
+
+        <div class="brand-text">
+          <div class="title">Mobile Vehicle Counter</div>
+          <div class="subtitle">Manage your vehicle traffic</div>
+        </div>
+      </div>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form class="login-form"
+            [formGroup]="form"
+            autocomplete="on">
+        <mat-form-field appearance="outline" class="full">
+          <mat-label>Email</mat-label>
+          <input matInput type="email"
+                 autocomplete="email"
+                 placeholder="you@company.com"
+                 formControlName="email"
+          />
+          <mat-icon matSuffix>mail</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full">
+          <mat-label>Password</mat-label>
+          <input matInput
+                 [type]=" hidePassword()? 'password' : 'text'"
+                 autocomplete="current-password"
+                 placeholder="••••••••"
+                 formControlName="password"/>
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="togglePasswordVisibility()"
+            [attr.aria-label]=" hidePassword()? 'Show password': ' Hide password'"
+            [attr.aria-pressed] = "!hidePassword()">
+            <mat-icon>{{ hidePassword()? 'visibility' : 'visibility_off'}}</mat-icon>
+          </button>
+        </mat-form-field>
+
+        <div class="row">
+          <a class="link" href="#" (click)="$event.preventDefault()">
+            Forgot password?
+          </a>
+        </div>
+
+        @if (errorText()){
+          <div class="login-error">
+            {{ errorText() }}
+          </div>
+        }
+
+        <button mat-flat-button color="primary" class="full" type="button" (click)="onSubmit($event)">
+          Log in/Submit
+        </button>
+
+      </form>
+    </mat-card-content>
+
+    <mat-card-actions class="login-footer">
+      <span class="muted">© {{ currentYear }} CLM</span>
+      <span class="dot">•</span>
+      <a class="link" href="#" (click)="$event.preventDefault()">Privacy</a>
+      <span class="dot">•</span>
+      <a class="link" href="#" (click)="$event.preventDefault()">Support</a>
+    </mat-card-actions>
+  </mat-card>
+</div>
