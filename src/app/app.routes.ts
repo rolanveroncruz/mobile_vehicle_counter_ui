@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import {LoginComponent} from './login-component/login-component';
 import {DashboardComponent} from './dashboard-component/dashboard-component';
 import {MainComponent} from './main-component/main-component';
+import {Settings} from './settings/settings';
 
 export const routes: Routes = [
   { path: '',  pathMatch: 'full', component:LoginComponent},
@@ -10,6 +11,7 @@ export const routes: Routes = [
     children: [
       {path: '', redirectTo: 'dashboard', pathMatch: 'full'},
       {path: 'dashboard', component: DashboardComponent},
+      {path: 'settings', component: Settings},
     ]
   },
 

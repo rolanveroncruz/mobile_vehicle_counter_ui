@@ -13,6 +13,7 @@ type MainNavItem = {
   label: string;
   icon: string;
   route: string; // relative to /main
+  alignRight?: boolean;
 };
 
 @Component({
@@ -39,8 +40,7 @@ export class MainComponent {
 
   readonly navItems: MainNavItem[] = [
     { label: 'Dashboard',   icon: 'dashboard',     route: '/main/dashboard' },
-    { label: 'Discoveries', icon: 'travel_explore', route: '/main/discoveries' },
-    { label: 'Agents',      icon: 'smart_toy',     route: '/main/agents' },
+    { label: 'Settings',      icon: 'settings',     route: '/main/settings',  alignRight: true },
   ];
 
   // Optional: derive a title from the current URL

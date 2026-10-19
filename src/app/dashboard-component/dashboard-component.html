@@ -1,1 +1,45 @@
-<p>dashboard-component works!</p>
+<div class="dashboard-container">
+
+    <!-- Header section for filters at the top left -->
+    <div class="dashboard-header">
+        <div class="filters-container">
+        <mat-form-field appearance="outline" class="location-dropdown">
+            <mat-label>Location</mat-label>
+            <mat-select [value]="selectedLocation()" (selectionChange)="onLocationChange($event.value)">
+                <!-- Default 'ALL' option at the top -->
+                <mat-option value="ALL">ALL</mat-option>
+
+                <!-- Iterate over fetched locations -->
+                @for (loc of locations(); track loc.id) {
+                    <mat-option [value]="loc.id" class="multi-line-option">
+                        <div class="option-content">
+                            <span class="loc-name">{{ loc.name }}</span>
+                            <span class="loc-desc">{{ loc.description }}</span>
+                        </div>
+                    </mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+            <mat-form-field appearance="outline" class="location-dropdown">
+                <mat-label>Sublocations</mat-label>
+                <!-- ✅ Enabled multiple selection and disabled it if no sublocations exist -->
+                <mat-select multiple [ngModel]="selectedSublocations()" (ngModelChange)="selectedSublocations.set($event)" [disabled]="sublocations().length === 0">
+                    @for (sub of sublocations(); track sub.id) {
+                        <mat-option [value]="sub.id" class="multi-line-option">
+                            <div class="option-content">
+                                <span class="loc-name">{{ sub.name }}</span>
+                                <span class="loc-desc">{{ sub.description }}</span>
+                            </div>
+                        </mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+    </div>
+
+    <div class="dashboard-content">
+        <!-- Graphs will be placed here -->
+    </div>
+
+</div>
