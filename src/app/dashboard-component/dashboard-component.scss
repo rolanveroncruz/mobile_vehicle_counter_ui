@@ -40,3 +40,45 @@
     color: #666666; /* Muted color to distinguish from the title */
     white-space: normal; /* Allows long descriptions to wrap if needed */
 }
+/* ✅ ✅ ✅ ✅ MULTIPLE LINES CHANGED ✅ ✅ ✅ ✅ */
+/* Dashboard Layout Elements */
+.dashboard-content {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.charts-grid {
+    display: grid;
+    /* Automatically places items side-by-side if they fit, or stacks them if the screen is narrow */
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 16px;
+    padding-top: 8px;
+}
+
+.chart-span-full {
+    grid-column: 1 / -1; /* Forces the item to stretch across all available columns */
+}
+
+.chart-card {
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+}
+
+.chart-container {
+    flex-grow: 1;
+    min-height: 350px; /* Gives the charts a dedicated height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* Optional: Light background to make the placeholder visible */
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    margin-top: 12px;
+}
+
+.chart-placeholder {
+    color: #888888;
+    font-style: italic;
+}

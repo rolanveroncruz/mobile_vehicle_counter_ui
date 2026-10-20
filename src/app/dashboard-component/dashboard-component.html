@@ -23,7 +23,7 @@
             <mat-form-field appearance="outline" class="location-dropdown">
                 <mat-label>Sublocations</mat-label>
                 <!-- ✅ Enabled multiple selection and disabled it if no sublocations exist -->
-                <mat-select multiple [ngModel]="selectedSublocations()" (ngModelChange)="selectedSublocations.set($event)" [disabled]="sublocations().length === 0">
+                <mat-select multiple [ngModel]="selectedSublocations()" (ngModelChange)="onSublocationsChange($event)" [disabled]="sublocations().length === 0">
                     @for (sub of sublocations(); track sub.id) {
                         <mat-option [value]="sub.id" class="multi-line-option">
                             <div class="option-content">
@@ -34,12 +34,72 @@
                     }
                 </mat-select>
             </mat-form-field>
+
+            <div class="time-filters-row">
+                <mat-form-field appearance="outline" class="time-dropdown">
+                    <mat-label>Start Datetime</mat-label>
+                    <input matInput type="datetime-local" [(ngModel)]="startDate" [disabled]="selectedSublocations().length === 0">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="time-dropdown">
+                    <mat-label>End Datetime</mat-label>
+                    <input matInput type="datetime-local" [(ngModel)]="endDate" [disabled]="selectedSublocations().length === 0">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="interval-dropdown">
+                    <mat-label>Interval</mat-label>
+                    <mat-select [(ngModel)]="selectedInterval">
+                        @for (interval of intervals(); track interval) {
+                            <mat-option [value]="interval">{{ interval }}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+
+                <button mat-flat-button color="primary" class="go-button" [disabled]="selectedSublocations().length === 0" (click)="onGoClicked()">
+                    Go
+                </button>
+            </div>
         </div>
 
     </div>
-
     <div class="dashboard-content">
-        <!-- Graphs will be placed here -->
+
+        <!-- Dashboard Grid Layout -->
+        <div class="charts-grid">
+
+            <!-- Chart 1: Event Counts (Vertical Bar Graph) -->
+            <!-- ✅ Spans the full width of the grid -->
+            <mat-card class="chart-card chart-span-full" appearance="outlined">
+                <mat-card-header>
+                    <mat-card-title>Binned Event Counts</mat-card-title>
+                </mat-card-header>
+                <mat-card-content class="chart-container">
+                    <app-raw-events-bar-graph [events]="binnedEvents()" (binClicked)="onBinClicked($event)"></app-raw-events-bar-graph>
+                </mat-card-content>
+            </mat-card>
+
+            <!-- Chart 2: Secondary Metric -->
+            <mat-card class="chart-card" appearance="outlined">
+                <mat-card-header>
+                    <mat-card-title>Unique Vehicles</mat-card-title>
+                </mat-card-header>
+                <mat-card-content class="chart-container">
+                    <div class="chart-placeholder">Chart 2 Placeholder</div>
+                </mat-card-content>
+            </mat-card>
+
+            <!-- Chart 3: Tertiary Metric -->
+            <mat-card class="chart-card" appearance="outlined">
+                <mat-card-header>
+                    <mat-card-title>Net Vehicle Count</mat-card-title>
+                </mat-card-header>
+                <mat-card-content class="chart-container">
+                    <div class="chart-placeholder">Chart 3 Placeholder</div>
+                </mat-card-content>
+            </mat-card>
+
+        </div>
     </div>
+
 
 </div>
